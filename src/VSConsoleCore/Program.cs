@@ -8,7 +8,17 @@ namespace VSOConsoleCore
     {
         static void Main(string[] args)
         {
+            VerifyValue();
+            sum(5,  6);
+            Foo().Wait();
+            InvokeFunc(); //set breakpoint1
+            VerifyException();
+            Console.WriteLine("Hello World!");
+            Console.ReadKey();
+        }
 
+        private static void VerifyValue()
+        {
             float[] values = Enumerable.Range(0, 100).Select(i => (float)i / 10).ToArray();
             float[] value = values.Where(v => (int)v == 4).ToArray();
 
@@ -21,11 +31,38 @@ namespace VSOConsoleCore
             {
                 list.AddHead(i);
             }
+        }
 
-            InvokeFunc(); //set breakpoint1
+        private static void VerifyException()
+        {
+            
+            try
+            {
+                string s4 = null;
+                string s5 = s4.ToString();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
 
-            Console.WriteLine("Hello World!");
-            Console.ReadKey();
+        
+        static async Task Foo()
+        {
+            await GenException();
+        }
+
+
+
+        static async Task<string> GenException()
+        {
+            await Task.Delay(1000);
+            return string.Format("{1}", "abc");
+        }
+        private static int sum(int v1, int v2)
+        {
+            return v1  +  v2;
         }
 
         static async void InvokeFunc()
